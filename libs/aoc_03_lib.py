@@ -1,6 +1,7 @@
 """aoc_03_lib"""
 
 from typing import List, Tuple, Dict, Set
+from libs.timer import timer
 
 
 def data_input(filename: str) -> str:
@@ -36,6 +37,7 @@ def path(wire: List[Tuple[str, int]]) -> List[Tuple[int, Tuple[int, ...]]]:
 
     return wire_length_path
 
+
 def calculate_wires_lengths_paths(data: str) -> List[List[Tuple[int, Tuple[int, ...]]]]:
     return [path(wire) for wire in data_transform(data)]
 
@@ -46,7 +48,7 @@ def calculate_crossings(wires_lengths_paths: List[List[Tuple[int, Tuple[int, ...
 
     # wires_lengths_paths = [path(wire) for wire in wires]
     wires_paths = [[element[1] for element in wire_length_path]
-                                          for wire_length_path in wires_lengths_paths]
+                   for wire_length_path in wires_lengths_paths]
 
     crossings = list(set(wires_paths[0]).intersection(
         *[set(element) for element in wires_paths[1:]]))
@@ -54,6 +56,7 @@ def calculate_crossings(wires_lengths_paths: List[List[Tuple[int, Tuple[int, ...
     return crossings
 
 
+@timer
 def part_1(data: str) -> int:
     """Part 1"""
     wires_lengths_paths = calculate_wires_lengths_paths(data)
@@ -61,6 +64,7 @@ def part_1(data: str) -> int:
     return min((abs(element[0]) + abs(element[1]) for element in crossings))
 
 
+@timer
 def part_2(data: str) -> int:
     """Part 2"""
     wires_lengths_paths = calculate_wires_lengths_paths(data)

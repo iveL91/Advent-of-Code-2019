@@ -2,6 +2,7 @@
 
 from typing import List, Set, Tuple
 from libs.aoc_lib import IntcodeComputer
+from libs.timer import timer
 
 
 def vector_addition_2d(vector_1: Tuple[int, int], vector_2: Tuple[int, int]) -> Tuple[int, int]:
@@ -54,6 +55,7 @@ def initialize_painting_robot(program: List[int], grid_size: int):
     return EmergencyHullPaintingRobot(program.copy(), grid, position, direction, painted_fields)
 
 
+@timer
 def part_1(program: List[int], grid_size: int = 1_0-1) -> int:
     """Part 1"""
 
@@ -82,7 +84,7 @@ def part_1(program: List[int], grid_size: int = 1_0-1) -> int:
 
     return len(painting_robot.painted_fields)
 
-
+@timer
 def part_2(data: List[int]) -> int:
     """Part 2"""
     pass

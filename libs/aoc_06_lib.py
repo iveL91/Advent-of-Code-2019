@@ -1,6 +1,7 @@
 """aoc_06_lib"""
 
 from typing import List
+from libs.timer import timer
 
 
 def data_input(filename: str) -> str:
@@ -37,6 +38,7 @@ def orbit_chain(orbits: List[List[str]], obj: str, chain: List[str]) -> List[str
     return chain
 
 
+@timer
 def part_1(data: str) -> int:
     """"""
     orbits = calc_orbits(data)
@@ -45,6 +47,7 @@ def part_1(data: str) -> int:
     # return sum(len(orbit_chain(orbits, obj, [])) for obj in objects)
 
 
+@timer
 def part_2(data: str) -> int:
     """"""
     orbits: List[List[str]] = calc_orbits(data)

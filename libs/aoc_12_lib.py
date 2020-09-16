@@ -4,6 +4,7 @@ import re
 from math import gcd
 from functools import reduce
 from typing import List, Pattern, Set, Tuple, Union
+from libs.timer import timer
 
 
 class Moon:
@@ -86,6 +87,7 @@ def data_input(filename: str) -> Universe:
             [Moon([int(x), int(y), int(z)], [0, 0, 0]) for x, y, z in matches])
 
 
+@timer
 def part_1(universe: Universe, steps: int = 1000) -> int:
     """"""
     for _ in range(steps):
@@ -98,6 +100,7 @@ def lcm(denominators):
     return reduce(lambda a, b: a*b // gcd(a, b), denominators)
 
 
+@timer
 def part_2(universe: Universe):
     """"""
     periods: List[int] = []

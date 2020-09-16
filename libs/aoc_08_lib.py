@@ -2,6 +2,7 @@
 
 import itertools
 from typing import List
+from libs.timer import timer
 
 
 def data_input(filename: str) -> List[int]:
@@ -24,6 +25,7 @@ def counting_in_layer(layer: List[List[int]], number: int) -> int:
     return sum(row.count(number) for row in layer)
 
 
+@timer
 def part_1(data: List[int], width: int, height: int) -> int:
     """"""
     layers: List[List[List[int]]] = partitioning_2d(data, width, height)
@@ -55,6 +57,7 @@ def build_image(layers: List[List[List[int]]], width: int, height: int) -> List[
     return image
 
 
+@timer
 def part_2(data: List[int], width: int, height: int) -> List[List[int]]:
     """()"""
     layers: List[List[List[int]]] = partitioning_2d(data, width, height)

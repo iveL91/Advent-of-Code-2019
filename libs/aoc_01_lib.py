@@ -1,6 +1,7 @@
 """aoc_01_lib"""
 
 from typing import Iterable, List
+from libs.timer import timer
 
 
 def data_input(filename: str) -> List[int]:
@@ -22,11 +23,13 @@ def added_fuel_calc(fuel: int) -> int:
     return added_fuels
 
 
+@timer
 def part_1(data: Iterable[int]) -> int:
     """Part 1"""
     return sum(fuel_calc(mass) for mass in data)
 
 
+@timer
 def part_2(data: Iterable[int]) -> int:
     """Part 2"""
     fuels = (fuel_calc(mass) for mass in data)

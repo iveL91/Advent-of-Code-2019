@@ -5,6 +5,7 @@ import itertools
 import string
 from typing import Iterable, List, Optional
 from libs.aoc_lib import IntcodeComputer
+from libs.timer import timer
 
 
 class Amplifier:
@@ -38,7 +39,8 @@ class AmplifierSystem:
 
     def initial_run(self) -> None:
         for amp in self.amplifiers:
-            amp.computer.inpt = 0 if amp is self.amplifiers[0] else amp.connected_from.computer.outputs[-1]
+            amp.computer.inpt = 0 if amp is self.amplifiers[
+                0] else amp.connected_from.computer.outputs[-1]
             amp.computer.run()
 
     def close_circuit(self) -> None:
@@ -64,9 +66,11 @@ def max_thrust(data: List[int], phase_settings: Iterable[int]) -> int:
     return functools.reduce(max, (AmplifierSystem(data, phase_setting).thruster_signal() for phase_setting in itertools.permutations(phase_settings)))
 
 
+@timer
 def part_1(data: List[int]) -> int:
     return max_thrust(data, range(5))
 
 
+@timer
 def part_2(data: List[int]) -> int:
     return max_thrust(data, range(5, 10))

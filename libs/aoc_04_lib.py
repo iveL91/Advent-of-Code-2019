@@ -1,6 +1,7 @@
 """aoc_04_lib"""
 
 from typing import List
+from libs.timer import timer
 
 
 def data_input(filename: str) -> List[str]:
@@ -56,6 +57,7 @@ def strict_adjacent(number: int) -> bool:
     return pair_adj
 
 
+@timer
 def part_1(data: List[str]) -> int:
     """"""
     minimum: int = int(data[0])
@@ -64,6 +66,7 @@ def part_1(data: List[str]) -> int:
     return len([1 for i in range(minimum, maximum) if (adjacent(i) and not_decreasing(i))])
 
 
+@timer
 def part_2(data: List[str]) -> int:
     """"""
     minimum: int = int(data[0])

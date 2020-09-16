@@ -4,6 +4,7 @@ import math
 import re
 from collections import defaultdict
 from typing import Dict, List, Optional, Pattern, Tuple, Union
+from libs.timer import timer
 
 
 class Nanofactory:
@@ -69,6 +70,7 @@ def data_input(filename: str) -> Dict[str, Dict[str, Union[int, List[Tuple[str, 
         return formulas
 
 
+@timer
 def part_1(formulas: Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]]) -> int:
     """"""
     nanofactory = Nanofactory(formulas, {"FUEL": 1})
@@ -76,6 +78,7 @@ def part_1(formulas: Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]]) ->
     return nanofactory.chemicals["ORE"]
 
 
+@timer
 def part_2(formulas: Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]]) -> int:
     """"""
     ore_total: int = 1_000_000_000_000

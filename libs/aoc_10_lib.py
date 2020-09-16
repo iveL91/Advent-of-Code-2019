@@ -4,6 +4,7 @@ import itertools
 import math
 from math import inf
 from typing import List, Dict, Tuple
+from libs.timer import timer
 
 
 def data_input(filename: str) -> List[List[int]]:
@@ -64,6 +65,7 @@ def create_view_dct(data: List[List[int]]) -> Dict[Tuple[int, int], int]:
     return view_dct
 
 
+@timer
 def part_1(data: List[List[int]]) -> int:
     """Part 1"""
     return max(create_view_dct(data).values())
@@ -131,6 +133,7 @@ def destroy(slope_dct: Dict[Tuple[int, int], List[Tuple[int, int]]]) -> List[Tup
     return destroyed
 
 
+@timer
 def part_2(data: List[List[int]]) -> int:
     """Part 2"""
     width, height = calc_grid_size(data)
