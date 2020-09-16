@@ -2,6 +2,7 @@
 
 import itertools
 import math
+from math import inf
 from typing import List, Dict, Tuple
 
 
@@ -27,11 +28,10 @@ def clear_view(grid_dct: Dict[Tuple[int, int], int],
     gcd, x_dir, y_dir = calc_direction(point_1, point_2)
     clearness: bool = True
 
-    if gcd != 1:
-        for i in range(1, gcd):
-            if grid_dct[(point_1[0] + i*x_dir, point_1[1] + i*y_dir)]:
-                clearness = False
-                break
+    for i in range(1, gcd):
+        if grid_dct[(point_1[0] + i*x_dir, point_1[1] + i*y_dir)]:
+            clearness = False
+            break
     return clearness
 
 
@@ -74,20 +74,14 @@ def sign(x: int) -> int:
     return -1 if x < 0 else (1 if x > 0 else 0)
 
 
-def calc_slope(direction: Tuple[int, int], height: int) -> float:
+def slope(direction: Tuple[int, int]) -> float:
     """"""
-    if direction[0] == 0:
-        # Greater than any possible slope
-        slope = 2 * height * sign(direction[1])
-    else:
-        slope = direction[1]/direction[0]
-    return slope
+    return direction[1]/direction[0] if direction[0] else float(inf)
 
 
 def create_slope_dct_quadrant(grid_dct: Dict[Tuple[int, int], int],
                               station_point: Tuple[int, int],
-                              quadrant: List[Tuple[int, int]],
-                              height: int)\
+                              quadrant: List[Tuple[int, int]])\
         -> Dict[Tuple[int, int], List[Tuple[int, int]]]:
     """"""
     slope_dct_quadrant: Dict[Tuple[int, int], List[Tuple[int, int]]] = {}
@@ -103,7 +97,7 @@ def create_slope_dct_quadrant(grid_dct: Dict[Tuple[int, int], int],
                 slope_dct_quadrant[direction] = [point]
 
     slope_dct_quadrant = dict(sorted(
-        slope_dct_quadrant.items(), key=lambda item: calc_slope(item[0], height)))
+        slope_dct_quadrant.items(), key=lambda item: slope(item[0])))
     for lst in slope_dct_quadrant.values():
         lst.sort(key=lambda point_2: (
             point_2[0]-station_point[0])**2 + (point_2[1]-station_point[1])**2)
@@ -152,7 +146,7 @@ def part_2(data: List[List[int]]) -> int:
                                               [(0, station_point[0]), (0, station_point[1])]]
 
     slope_dct_quadrants: List[Dict[Tuple[int, int], List[Tuple[int, int]]]] = [
-        create_slope_dct_quadrant(grid_dct, station_point, quadrant, height) for quadrant in
+        create_slope_dct_quadrant(grid_dct, station_point, quadrant) for quadrant in
         quadrants]
 
     slope_dct: Dict[Tuple[int, int], List[Tuple[int, int]]] = {}

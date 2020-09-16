@@ -41,6 +41,11 @@ class Universe:
         """"""
         self.moons: List[Moon] = moon_list
 
+    @property
+    def total_energy(self) -> int:
+        """"""
+        return sum((moon.total_energy for moon in self.moons))
+
     def apply_gravity_axis(self, axis: int) -> None:
         """"""
         for moon_1_index, moon_1 in enumerate(self.moons):
@@ -64,30 +69,21 @@ class Universe:
         for axis in range(3):
             self.step_axis(axis)
 
-    @property
-    def total_energy(self) -> int:
-        """"""
-        return sum((moon.total_energy for moon in self.moons))
-
 
 def sign(number: Union[int, float]) -> int:
     """"""
-    if number < 0:
-        return -1
-    elif number > 0:
-        return 1
-    else:
-        return 0
+    return -1 if number < 0 else (1 if number > 0 else 0)
 
 
 def data_input(filename: str) -> Universe:
     """"""
     with open(filename) as f:
         data: str = f.read()
-        pattern: Pattern[str] = re.compile(r"<x=(-?\d+), y=(-?\d+), z=(-?\d+)>")
+        pattern: Pattern[str] = re.compile(
+            r"<x=(-?\d+), y=(-?\d+), z=(-?\d+)>")
         matches: List[str] = re.findall(pattern, data)
         return Universe(
-            [Moon([int(x), int(y), int(z)], [0, 0, 0]) for index, (x, y, z) in enumerate(matches)])
+            [Moon([int(x), int(y), int(z)], [0, 0, 0]) for x, y, z in matches])
 
 
 def part_1(universe: Universe, steps: int = 1000) -> int:
@@ -109,17 +105,20 @@ def part_2(universe: Universe):
         # Determine the first element in a period and the start of the second period
         new_universe: Universe = universe
         pos_vels: Set[Tuple[Tuple[int, int]]] = set()
-        new_pos_vel: Tuple[Tuple[int, int]] = tuple([(moon.position[axis], moon.velocity[axis]) for moon in new_universe.moons])
+        new_pos_vel: Tuple[Tuple[int, int]] = tuple(
+            [(moon.position[axis], moon.velocity[axis]) for moon in new_universe.moons])
         second_occurrence: int = 0
         while new_pos_vel not in pos_vels:
             pos_vels.add(new_pos_vel)
             new_universe.step_axis(axis)
-            new_pos_vel = tuple([(moon.position[axis], moon.velocity[axis]) for moon in new_universe.moons])
+            new_pos_vel = tuple(
+                [(moon.position[axis], moon.velocity[axis]) for moon in new_universe.moons])
             second_occurrence += 1
 
         # Determine the start of the first period
         new_universe: Universe = universe
-        pos_vel: Tuple[Tuple[int, int]] = tuple([(moon.position[axis], moon.velocity[axis]) for moon in new_universe.moons])
+        pos_vel: Tuple[Tuple[int, int]] = tuple(
+            [(moon.position[axis], moon.velocity[axis]) for moon in new_universe.moons])
         first_occurrence: int = 0
         while pos_vel != new_pos_vel:
             new_universe.step_axis(axis)

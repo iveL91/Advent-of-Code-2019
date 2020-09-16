@@ -5,7 +5,7 @@ from libs.aoc_lib import IntcodeComputer
 
 
 def vector_addition_2d(vector_1: Tuple[int, int], vector_2: Tuple[int, int]) -> Tuple[int, int]:
-    return (vector_1[0] + vector_2[0], vector_1[1] + vector_2[1])
+    return tuple(element_1 + element_2 for element_1, element_2 in zip(vector_1, vector_2))
 
 
 class EmergencyHullPaintingRobot:
@@ -57,7 +57,7 @@ def initialize_painting_robot(program: List[int], grid_size: int):
 def part_1(program: List[int], grid_size: int = 1_0-1) -> int:
     """Part 1"""
 
-    painting_robot = initialize_painting_robot(program+[0]*100_000, grid_size)
+    painting_robot = initialize_painting_robot(program, grid_size)
     counter = 0
 
     while not painting_robot.computer.stop:

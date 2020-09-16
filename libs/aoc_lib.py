@@ -26,13 +26,7 @@ class IntcodeComputer:
         self.outputs: List[int] = []
         self.relative_base = relative_base
         self.stop: bool = False
-
-    @property
-    def opcode(self) -> int:
-        return self.data[self.address] % 100
-
-    def computation(self) -> None:
-        operations: Dict[int, Callable] = {
+        self.command_dict: Dict[int, Callable] = {
             1: AddCommand(self),
             2: MulCommand(self),
             3: InputCommand(self),
@@ -44,12 +38,21 @@ class IntcodeComputer:
             9: AdjustRelativeBaseCommand(self),
             99: BreakerCommand(self)
         }
-        operations[self.opcode]()
+    @property
+    def value(self):
+        return self.data[self.address]
+
+    @property
+    def opcode(self) -> int:
+        return self.value % 100
+
+    def computation(self) -> None:
+        self.command_dict[self.opcode]()
 
     def run(self):
         while not self.stop:
             self.computation()
-        if self.data[self.address] == 3:
+        if self.value == 3:
             self.stop = False
         return self
 
@@ -63,13 +66,13 @@ class Command:
         return self.intcode_computer.data[self.intcode_computer.address + n]
 
     def nth_mode(self, n: int) -> int:
-        return nth_decimal_position(self.intcode_computer.data[self.intcode_computer.address], n+1)
+        return nth_decimal_position(self.intcode_computer.value, n+1)
 
     def nth_mode_value(self, n: int) -> int:
         mode_value_dict: Dict[int, Callable] = {
-            0: lambda x: self.intcode_computer.data[x],
-            1: lambda x: x,
-            2: lambda x: self.intcode_computer.data[x + self.intcode_computer.relative_base]
+            0: lambda x: self.intcode_computer.data[x],  # position mode
+            1: lambda x: x,  # parameter mode
+            2: lambda x: self.intcode_computer.data[x + self.intcode_computer.relative_base]  # relative mode
         }
         return mode_value_dict[self.nth_mode(n)](self.nth_parameter(n))
 

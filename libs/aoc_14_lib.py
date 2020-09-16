@@ -11,14 +11,9 @@ class Nanofactory:
 
     def __init__(self, formulas: Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]],
                  chemicals_dict: Dict[str, int], extra_dict: Optional[dict] = None) -> None:
-        self.reactions: Dict[str, Dict[str,
-                                       Union[int, List[Tuple[str, int]]]]] = formulas
-        self.chemicals: Dict[str, int] = chemicals_dict
+        self.reactions = formulas
+        self.chemicals = chemicals_dict
         self.extra = extra_dict or {chemical: 0 for chemical in self.reactions}
-        # if extra_dict is None:
-        #     self.extra = {chemical: 0 for chemical in self.reactions}
-        # else:
-        #     self.extra = extra_dict
 
     def step(self) -> None:
         new_chemicals: Dict[str, int] = defaultdict(int)
@@ -41,7 +36,7 @@ class Nanofactory:
                     chemical_amount, self.extra[chemical])
 
         self.chemicals = {key: value for key,
-                          value in new_chemicals.items() if value != 0}
+                          value in new_chemicals.items() if value}
 
     def calculate_ore(self) -> None:
         while True:
@@ -53,17 +48,15 @@ class Nanofactory:
 
 def reduce_extra(number_1: int, number_2: int) -> Tuple[int, int]:
     if number_1 >= number_2:
-        number_1, number_2 = number_1-number_2, 0
+        return number_1-number_2, 0
     else:
-        number_1, number_2 = 0,  number_2 - number_1
-    return number_1, number_2
+        return 0,  number_2 - number_1
 
 
 def data_input(filename: str) -> Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]]:
     """"""
     with open(filename) as f:
-        data: List[List[str]] = [line.split(" => ")
-                                 for line in f.read().splitlines()]
+        data = [line.split(" => ") for line in f.read().splitlines()]
         formulas: Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]] = {}
         for input_chemicals, output_chemical in data:
             pattern: Pattern[str] = re.compile(r"(\d+) (\w+)")
@@ -78,7 +71,7 @@ def data_input(filename: str) -> Dict[str, Dict[str, Union[int, List[Tuple[str, 
 
 def part_1(formulas: Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]]) -> int:
     """"""
-    nanofactory: Nanofactory = Nanofactory(formulas, {"FUEL": 1})
+    nanofactory = Nanofactory(formulas, {"FUEL": 1})
     nanofactory.calculate_ore()
     return nanofactory.chemicals["ORE"]
 
@@ -94,7 +87,7 @@ def part_2(formulas: Dict[str, Dict[str, Union[int, List[Tuple[str, int]]]]]) ->
         if ore_total > 0:
             fuel_total += 1
             nanofactory.chemicals = {"FUEL": 1}
-        elif ore_total == 0:
+        elif not ore_total:
             fuel_total += 1
             break
         else:

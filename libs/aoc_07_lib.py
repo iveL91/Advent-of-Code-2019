@@ -1,5 +1,6 @@
 """aoc_07_lib"""
 
+import functools
 import itertools
 import string
 from typing import Iterable, List, Optional
@@ -27,7 +28,7 @@ class AmplifierSystem:
 
     def connect(self) -> None:
         for index, amp in enumerate(self.amplifiers):
-            if index == 0:
+            if not index:
                 amp.connected_to = self.amplifiers[index + 1]
             elif index == len(self.amplifiers) - 1:
                 amp.connected_from = self.amplifiers[index - 1]
@@ -37,10 +38,7 @@ class AmplifierSystem:
 
     def initial_run(self) -> None:
         for amp in self.amplifiers:
-            if amp is self.amplifiers[0]:
-                amp.computer.inpt = 0
-            else:
-                amp.computer.inpt = amp.connected_from.computer.outputs[-1]
+            amp.computer.inpt = 0 if amp is self.amplifiers[0] else amp.connected_from.computer.outputs[-1]
             amp.computer.run()
 
     def close_circuit(self) -> None:
@@ -63,13 +61,7 @@ class AmplifierSystem:
 
 
 def max_thrust(data: List[int], phase_settings: Iterable[int]) -> int:
-    result: int = -1
-
-    for phase_setting in itertools.permutations(phase_settings):
-        # system = AmplifierSystem(data, phase_setting)
-        result = max(result, AmplifierSystem(
-            data, phase_setting).thruster_signal())
-    return result
+    return functools.reduce(max, (AmplifierSystem(data, phase_setting).thruster_signal() for phase_setting in itertools.permutations(phase_settings)))
 
 
 def part_1(data: List[int]) -> int:

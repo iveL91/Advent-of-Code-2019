@@ -11,6 +11,7 @@
 
 import itertools
 from typing import Iterator, List
+from libs.timer import timer
 
 
 class FFT:
@@ -31,7 +32,7 @@ class FFT:
     #     pattern = [element for element in [0,1,0,-1] for _ in range(index)]
     #     pattern_shifted = pattern[1:] + pattern[0]
     #     amount =
-
+    @timer
     def phase(self) -> None:
         """"""
         basic_pattern_length: int = len(self.basic_pattern)
@@ -72,7 +73,7 @@ def create_pattern_iter(lst: list, index_lst: int, repetitions: int, pattern_len
     step = pattern_length * repetitions
     return (i + j for i, j in itertools.product(range(repetitions*index_lst + shift, len(lst), step), range(repetitions)) if i + j < len(lst))
 
-
+@timer
 def list_int_to_int(lst: List[int]) -> int:
     """"""
     return int("".join(str(number) for number in lst)) if lst else 0
@@ -81,19 +82,19 @@ def list_int_to_int(lst: List[int]) -> int:
     # else:
     #     return 0
 
-
+@timer
 def constructor(signal: List[int], phases_amount: int, offset: int = 0, signal_repetitions: int = 1):
     """"""
-    message_offset: int = list_int_to_int(signal[:offset])
-    real_signal: List[int] = signal * signal_repetitions
-    fft: FFT = FFT(real_signal)
+    message_offset = list_int_to_int(signal[:offset])
+    real_signal = signal * signal_repetitions
+    fft = FFT(real_signal)
     while fft.phase_count < phases_amount:
     # for _ in range(phases_amount):
         fft.phase()
         # print(fft.phase_count)
     return list_int_to_int(fft.signal[message_offset:message_offset + 8])
 
-
+@timer
 def part_1(signal: List[int], phases_amount: int = 100) -> int:
     """"""
     return constructor(signal, phases_amount)
